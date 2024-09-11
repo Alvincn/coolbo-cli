@@ -1,0 +1,25 @@
+{
+  "name": "coolbo-cli",
+  "version": "1.0.0",
+  "description": "封装cli",
+  "main": "index.js",
+  "bin": {
+    "coolbo": "bin/index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "files": [
+    "bin"
+  ],
+  "keywords": [],
+  "author": "Coolbo",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^12.1.0",
+    "download-git-repo": "^3.0.2",
+    "fs-extra": "^11.2.0",
+    "inquirer": "^8.2.6",
+    "ora": "^5.4.1"
+  }
+}
