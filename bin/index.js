@@ -104,7 +104,6 @@ program
     .option('-p, --push', '提交并推送')
     .description('📤提交Git')
     .action(async (commitText, options) => {
-        console.log(123)
         const pushLoading = ora('🤖正在推送...')
         // coolbo commit -p
         if(!commitText && options.push) {
@@ -126,7 +125,9 @@ program
             execSync('git add .', { stdio: 'inherit' });
             console.log()
             execSync(`git commit -m "${commitText}"`, { stdio: 'inherit' });
-            console.log('🔭提交成功！使用 coolbo commit -p 进行推送！')
+            if(!options.push) {
+                console.log('🔭提交成功！使用 coolbo commit -p 进行推送！')
+            }
             // coolbo commit 'test' -p
             if(options.push) {
                 pushLoading.start()
