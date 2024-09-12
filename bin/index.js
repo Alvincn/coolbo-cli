@@ -5,16 +5,17 @@ const packageJson = require('../package.json')
 const inquirer = require('inquirer')
 const templates = require('./templates')
 const fs = require('fs-extra')
-const { downloadTemplate } = require('./downloadGithub')
+const {downloadTemplate} = require('./downloadGithub')
 const path = require("path");
-const { ESLint } = require("eslint");
-const { execSync } = require('child_process');
+const {ESLint} = require("eslint");
+const {execSync} = require('child_process');
 const ora = require('ora') // 引入ora
 
 
 // 定义当前版本
 program.version(`v${packageJson.version}`)
-program.on('--help', () => {}) // 添加--help
+program.on('--help', () => {
+}) // 添加--help
 // create 命令
 program
     .command('create [projectName]') // [projectName]是可选 <projectName>是必填
@@ -28,8 +29,8 @@ program
         // 2. 如果有模板
         let projectTemplate = project ? project.value : undefined
         // 3. 判断用户是否输入了 projectName
-        if(!projectName) {
-            const { name } = await inquirer.prompt({
+        if (!projectName) {
+            const {name} = await inquirer.prompt({
                 type: 'input',
                 name: 'name',
                 message: '请输入项目名称'
@@ -38,8 +39,8 @@ program
         }
 
         // 4. 如果没有传入模板
-        if(!projectTemplate) {
-            const { template } = await inquirer.prompt({
+        if (!projectTemplate) {
+            const {template} = await inquirer.prompt({
                 type: 'list',
                 name: 'template',
                 message: '请选择创建模版',
@@ -50,8 +51,8 @@ program
 
         // 5. 判断当前是否有这个文件夹，是否覆盖
         const dest = path.join(process.cwd(), projectName)
-        if(fs.pathExistsSync(dest)) {
-            const { force } = await inquirer.prompt({
+        if (fs.pathExistsSync(dest)) {
+            const {force} = await inquirer.prompt({
                 type: 'confirm',
                 name: 'force',
                 message: '目录已存在，是否覆盖？',
@@ -88,11 +89,11 @@ program
         const errorCount = results.reduce((accumulator, currentResult) => {
             return accumulator + currentResult.errorCount;
         }, 0);
-        if(errorCount === 0) {
+        if (errorCount === 0) {
             console.log('👏少侠好实力，一个bug都没有！')
-        }else if(errorCount <= 2) {
+        } else if (errorCount <= 2) {
             console.log('✊就差一点了，加油修复吧！')
-        }else {
+        } else {
             console.log('👊这么多bug，你是要上天吗！')
         }
         // process.exit(hasErrors ? 1 : 0);
@@ -106,15 +107,15 @@ program
     .action(async (commitText, options) => {
         const pushLoading = ora('🤖正在推送...')
         // coolbo commit -p
-        if(!commitText && options.push) {
+        if (!commitText && options.push) {
             pushLoading.start()
             console.log()
-            execSync('git push', { stdio: 'inherit' });
+            execSync('git push', {stdio: 'inherit'});
             pushLoading.succeed('💎推送 Git 成功！')
-        }else {
+        } else {
             // coolbo commit 'test'
-            if(!commitText) {
-                const { text } = await inquirer.prompt({
+            if (!commitText) {
+                const {text} = await inquirer.prompt({
                     type: 'input',
                     name: 'text',
                     message: '请输入提交信息'
@@ -122,18 +123,19 @@ program
                 commitText = text
             }
             console.log()
-            execSync('git add .', { stdio: 'inherit' });
+            execSync('git add .', {stdio: 'inherit'});
             console.log()
-            execSync(`git commit -m "${commitText}"`, { stdio: 'inherit' });
-            if(!options.push) {
+            execSync(`git commit -m "${commitText}"`, {stdio: 'inherit'});
+            if (!options.push) {
                 console.log('🔭提交成功！使用 coolbo commit -p 进行推送！')
             }
             // coolbo commit 'test' -p
-            if(options.push) {
+            if (options.push) {
                 pushLoading.start()
                 console.log()
-                execSync('git push', { stdio: 'inherit' });
-                pushLoading.succeed('💎推送 Git 成功！')            }
+                execSync('git push', {stdio: 'inherit'});
+                pushLoading.succeed('💎推送 Git 成功！')
+            }
         }
     })
 
