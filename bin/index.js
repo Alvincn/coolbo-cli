@@ -106,6 +106,14 @@ program
     .description('📤提交Git')
     .action(async (commitText, options) => {
         const pushLoading = ora('🤖正在推送...')
+        // lint 检查
+        const eslint = new ESLint();
+        const results = await eslint.lintFiles(["src/**/*.{js,ts,vue,jsx,tsx}"]);
+        const hasErrors = results.some(result => result.errorCount > 0);
+        if(hasErrors) {
+            console.log('❌先运行[coolbo lint]检查无误后，再提交哦！')
+            process.exit(1);
+        }
         // coolbo commit -p
         if (!commitText && options.push) {
             pushLoading.start()
@@ -127,7 +135,7 @@ program
             console.log()
             execSync(`git commit -m "${commitText}"`, {stdio: 'inherit'});
             if (!options.push) {
-                console.log('🔭提交成功！使用 coolbo commit -p 进行推送！')
+                console.log('🔭提交成功！使用[coolbo commit -p]进行推送！')
             }
             // coolbo commit 'test' -p
             if (options.push) {
