@@ -7,10 +7,13 @@ const templates = require('./templates')
 const fs = require('fs-extra')
 const { downloadTemplate } = require('./downloadGithub')
 const path = require("path");
+const { ESLint } = require("eslint");
+const { execSync } = require('child_process');
+
+
 // 定义当前版本
 program.version(`v${packageJson.version}`)
 program.on('--help', () => {}) // 添加--help
-
 // create 命令
 program
     .command('create [projectName]') // [projectName]是可选 <projectName>是必填
@@ -60,5 +63,68 @@ program
         await downloadTemplate(projectTemplate, dest, projectName)
     })
 
+// lint 命令
+program
+    .command('lint')
+    .option('-f, --fix', '是否修复')
+    .description('🔍Lint代码检查')
+    .action(async (options) => {
+        const eslint = new ESLint({
+            fix: options.fix,
+        });
+        const results = await eslint.lintFiles(["src/**/*.{js,ts,vue,jsx,tsx}"]);
+
+        if (options.fix) {
+            await ESLint.outputFixes(results);
+        }
+
+        const formatter = await eslint.loadFormatter("stylish");
+        const resultText = formatter.format(results);
+
+        console.log(resultText);
+
+        // const hasErrors = results.some(result => result.errorCount > 0);
+        const errorCount = results.reduce((accumulator, currentResult) => {
+            return accumulator + currentResult.errorCount;
+        }, 0);
+        if(errorCount === 0) {
+            console.log('👏少侠好实力，一个bug都没有！')
+        }else if(errorCount <= 2) {
+            console.log('✊就差一点了，加油修复吧！')
+        }else {
+            console.log('👊这么多bug，你是要上天吗！')
+        }
+        // process.exit(hasErrors ? 1 : 0);
+    })
+
+// 推送 git
+program
+    .command('commit [commitText]')
+    .option('-p, --push', '提交并推送')
+    .description('📤提交Github')
+    .action(async (commitText, options) => {
+        // coolbo commit -p
+        if(!commitText && options.push) {
+            execSync('git push', { stdio: 'inherit' });
+            console.log('💎提交 Git 成功！')
+        }else {
+            // coolbo commit 'test'
+            if(!commitText) {
+                const { text } = await inquirer.prompt({
+                    type: 'input',
+                    name: 'text',
+                    message: '请输入提交信息'
+                })
+                commitText = text
+            }
+            execSync('git add .', { stdio: 'inherit' });
+            execSync(`git commit -m "${commitText}"`, { stdio: 'inherit' });
+            console.log('🔭推送成功！使用 coolbo commit -p 进行推送！')
+            // coolbo commit 'test' -p
+            if(options.push) {
+                execSync(`git push"`, { stdio: 'inherit' });
+            }
+        }
+    })
 // 解析用户执行命令传入参数
 program.parse(process.argv)
