@@ -102,12 +102,14 @@ program
 program
     .command('commit [commitText]')
     .option('-p, --push', '提交并推送')
-    .description('📤提交Github')
+    .description('📤提交Git')
     .action(async (commitText, options) => {
+        console.log(123)
         const pushLoading = ora('🤖正在推送...')
         // coolbo commit -p
         if(!commitText && options.push) {
             pushLoading.start()
+            console.log()
             execSync('git push', { stdio: 'inherit' });
             pushLoading.succeed('💎推送 Git 成功！')
         }else {
@@ -120,15 +122,30 @@ program
                 })
                 commitText = text
             }
+            console.log()
             execSync('git add .', { stdio: 'inherit' });
+            console.log()
             execSync(`git commit -m "${commitText}"`, { stdio: 'inherit' });
             console.log('🔭提交成功！使用 coolbo commit -p 进行推送！')
             // coolbo commit 'test' -p
             if(options.push) {
                 pushLoading.start()
+                console.log()
                 execSync('git push', { stdio: 'inherit' });
                 pushLoading.succeed('💎推送 Git 成功！')            }
         }
+    })
+
+// 拉取 git
+program
+    .command('pull')
+    .description('📥拉取Git')
+    .action(async () => {
+        const pullLoading = ora('🤖正在拉取...')
+        pullLoading.start()
+        console.log()
+        execSync('git pull', {stdio: 'inherit'})
+        pullLoading.succeed('💎拉取 Git 成功！')
     })
 // 解析用户执行命令传入参数
 program.parse(process.argv)
