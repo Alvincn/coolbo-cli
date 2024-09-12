@@ -103,6 +103,8 @@ program
     .option('-p, --push', '提交并推送')
     .description('📤提交Github')
     .action(async (commitText, options) => {
+        execSync('git pull --rebase', { stdio: 'inherit' });
+
         // coolbo commit -p
         if(!commitText && options.push) {
             execSync('git push', { stdio: 'inherit' });
