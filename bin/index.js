@@ -9,6 +9,7 @@ const { downloadTemplate } = require('./downloadGithub')
 const path = require("path");
 const { ESLint } = require("eslint");
 const { execSync } = require('child_process');
+const ora = require('ora') // 引入ora
 
 
 // 定义当前版本
@@ -103,12 +104,12 @@ program
     .option('-p, --push', '提交并推送')
     .description('📤提交Github')
     .action(async (commitText, options) => {
-        execSync('git pull --rebase', { stdio: 'inherit' });
-
+        const pushLoading = ora('🤖正在推送...')
         // coolbo commit -p
         if(!commitText && options.push) {
+            pushLoading.start()
             execSync('git push', { stdio: 'inherit' });
-            console.log('💎提交 Git 成功！')
+            pushLoading.succeed('💎推送 Git 成功！')
         }else {
             // coolbo commit 'test'
             if(!commitText) {
@@ -121,11 +122,12 @@ program
             }
             execSync('git add .', { stdio: 'inherit' });
             execSync(`git commit -m "${commitText}"`, { stdio: 'inherit' });
-            console.log('🔭推送成功！使用 coolbo commit -p 进行推送！')
+            console.log('🔭提交成功！使用 coolbo commit -p 进行推送！')
             // coolbo commit 'test' -p
             if(options.push) {
-                execSync(`git push"`, { stdio: 'inherit' });
-            }
+                pushLoading.start()
+                execSync('git push', { stdio: 'inherit' });
+                pushLoading.succeed('💎推送 Git 成功！')            }
         }
     })
 // 解析用户执行命令传入参数
