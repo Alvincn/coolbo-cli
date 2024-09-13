@@ -1,7 +1,7 @@
 # Coolbo-cli
 🌈Integrate common commands to quickly build projects, check, submit, etc., simplify project building, and focus on project development.
 
-**Version**: 1.0.0
+**Version**: 0.0.1
 
 [简体中文](./README.md) | **[English](./README.en.md)**
 
@@ -25,7 +25,7 @@ Used to quickly create templates. Templates are obtained from Github and updated
     coolbo create
     ``` 
     Enter project name:
-    ```bash
+    ```bash[README.md](README.md)
     ? 请输入项目名称
     ``` 
     Select a template:
@@ -117,6 +117,36 @@ Pull the code from Git.
     ```bash
     coolbo pull 
     ``` 
+
+
+### config
+View/configure the template source. The template in create comes from Github. You can configure your own Github and the template will be obtained from your Github.
+The default source is: **coolbo-cn**.
+
+**Usage：**
+1. config
+    ```bash
+    coolbo config 
+    ```
+   Get the current Git username.
+2. config -u
+    ```bash
+    coolbo config -u
+    ```
+    Enter your Git username:
+    ```bash
+    ? 请输入 Git 模板用户名 
+    ```
+3. config -u [gitName]
+    ```bash
+    coolbo config -u coolbo-cn
+    ```
+
+4. config -r
+    ```bash
+    coolbo config -r
+    ```
+    Reset to default Git source.
 
 ### help
 Read Help

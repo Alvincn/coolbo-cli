@@ -1,7 +1,7 @@
 # Coolbo-cli
 🌈集成常用命令，快速搭建项目、检查、提交等，简化项目搭建，专注于项目开发。
 
-**版本**: 1.0.0
+**版本**: 0.0.1
 
 **[简体中文](./README.md)** | [English](./README.en.md)
 
@@ -116,9 +116,38 @@ yarn:`yarn global add coolbo-cli`
 1. pull
     ```bash
     coolbo pull 
-    ``` 
+    ```
 
-### help 
+### config
+查看/配置模版来源，create中模版来源于 Github，你可以配置自己的 Github，将会从你的 Github 获取模版。
+默认来源于：**coolbo-cn**
+
+**使用：**
+1. config
+    ```bash
+    coolbo config 
+    ```
+   获取当前 Git 用户名
+2. config -u
+    ```bash
+    coolbo config -u
+    ```
+   输入 Git 用户名：
+    ```bash
+    ? 请输入 Git 模板用户名 
+    ```
+3. config -u [gitName]
+    ```bash
+    coolbo config -u coolbo-cn
+    ```
+   
+4. config -r
+    ```bash
+    coolbo config -r
+    ```
+   重置为默认 Git 来源
+
+### help
 查看帮助
 
 **使用：**
@@ -126,7 +155,7 @@ yarn:`yarn global add coolbo-cli`
     ```bash
     coolbo help 
     ```
-   
+
 2. -h
     ```bash
     coolbo -h 
