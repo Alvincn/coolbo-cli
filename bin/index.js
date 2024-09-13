@@ -3,28 +3,36 @@
 const {program} = require('commander')
 const packageJson = require('../package.json')
 const inquirer = require('inquirer')
-const templates = require('./templates')
 const fs = require('fs-extra')
 const {downloadTemplate} = require('./downloadGithub')
 const path = require("path");
+// ESLint
 const {ESLint} = require("eslint");
+// 命令行执行
 const {execSync} = require('child_process');
+// 进度条
 const ora = require('ora') // 引入ora
-
+const {getAllTemplates} = require('./getAllTemplates.js')
+const {getConfigFromFile, writeConfig} = require("./writeConfig");
 
 // 定义当前版本
 program.version(`v${packageJson.version}`)
-program.on('--help', () => {
-}) // 添加--help
+program.on('--help', () => {}) // 添加--help
+
 // create 命令
 program
     .command('create [projectName]') // [projectName]是可选 <projectName>是必填
     .option('-t, --template <template>', '模版名称') // 配置项 --template xxx
     .description('👨🏻‍💻创建代码模版')
     .action(async (projectName, options) => {
+        const getLoading = ora('🤖正在获取模板...')
         // coolbo create <projectName> -t <templateName>
         // eg: coolbo create HelloVue -t vue3
         // 1. 根据用户输入的模版查找是否有这个模板
+        getLoading.start()
+        let user = await getConfigFromFile()
+        const templates = await getAllTemplates(user.username)
+        getLoading.succeed('🎖️获取模板成功！当前模版来源：' + user.username)
         const project = templates.find(template => template.name.includes(options.template))
         // 2. 如果有模板
         let projectTemplate = project ? project.value : undefined
@@ -119,7 +127,7 @@ program
             pushLoading.start()
             console.log()
             execSync('git push', {stdio: 'inherit'});
-            pushLoading.succeed('💎推送 Git 成功！')
+            pushLoading.succeed('🎖️推送 Git 成功！')
         } else {
             // coolbo commit 'test'
             if (!commitText) {
@@ -142,7 +150,7 @@ program
                 pushLoading.start()
                 console.log()
                 execSync('git push', {stdio: 'inherit'});
-                pushLoading.succeed('💎推送 Git 成功！')
+                pushLoading.succeed('🎖️推送 Git 成功！')
             }
         }
     })
@@ -156,7 +164,34 @@ program
         pullLoading.start()
         console.log()
         execSync('git pull', {stdio: 'inherit'})
-        pullLoading.succeed('💎拉取 Git 成功！')
+        pullLoading.succeed('🎖️拉取 Git 成功！')
+    })
+
+// 配置 Git 模版用户
+program
+    .command('config')
+    .option('-u --user [gitName]', '配置用户')
+    .option('-r --reset', '重置模版')
+    .description('👾获取 Git 模板用户名')
+    .action(async (options) => {
+        if(options.reset) {
+            return await writeConfig('coolbo-cn')
+        }
+        if(Object.keys(options).length === 0) {
+            let user = await getConfigFromFile()
+            console.log('🎖️当前 Git 用户为：' + user.username + `${user.username === 'coolbo-cn'? ' -> default': ' -> custom'}`)
+            return
+        }
+        if(options.user && typeof options.user === "boolean") {
+            const {name} = await inquirer.prompt({
+                type: 'input',
+                name: 'name',
+                message: '请输入 Git 模板用户名'
+            })
+            options.user = name
+        }else {
+            await writeConfig(options.user)
+        }
     })
 // 解析用户执行命令传入参数
 program.parse(process.argv)

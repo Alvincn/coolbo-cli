@@ -1,5 +1,4 @@
 const downloadGitRepo = require('download-git-repo')
-const path = require('path')
 const ora = require('ora') // 引入ora
 const loading = ora('🤖正在下载模版...')
 const downloadTemplate = async (repo, dest, name) => {
