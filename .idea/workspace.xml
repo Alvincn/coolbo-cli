@@ -6,7 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="5b309413-e6dd-428f-b060-181ec34bddb5" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.en.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.en.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/config/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/bin/config/config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/downloadGithub.js" beforeDir="false" afterPath="$PROJECT_DIR$/bin/downloadGithub.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/getAllTemplates.js" beforeDir="false" afterPath="$PROJECT_DIR$/bin/getAllTemplates.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/bin/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eslint.config.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/eslint.config.mjs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,8 +50,10 @@
     "javascript.nodejs.core.library.typings.version": "18.19.50",
     "last_opened_file_path": "/Users/chenshibo/Desktop/test/coolbo-cli",
     "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.standard": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.standard": "",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "ts.external.directory.path": "/Users/chenshibo/Desktop/test/coolbo-cli/node_modules/typescript/lib",
@@ -88,7 +97,8 @@
       <workItem from="1726122112185" duration="13000" />
       <workItem from="1726130821779" duration="4760000" />
       <workItem from="1726209988390" duration="3089000" />
-      <workItem from="1726213120065" duration="308000" />
+      <workItem from="1726213120065" duration="328000" />
+      <workItem from="1726213573589" duration="1219000" />
     </task>
     <servers />
   </component>

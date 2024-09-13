@@ -1,7 +1,7 @@
 # Coolbo-cli
 🌈Integrate common commands to quickly build projects, check, submit, etc., simplify project building, and focus on project development.
 
-**Version**: 0.0.1
+**Version**: 0.0.2
 
 [简体中文](./README.md) | **[English](./README.en.md)**
 
@@ -60,6 +60,11 @@ Use Eslint for code inspection and quick fixes.
     coolbo lint -f | --fix
     ``` 
    Code review and repair.
+3. lint -n
+    ```bash
+    coolbo lint -n
+    ``` 
+   Conduct nuxt code review.
 
 **Rules:**
 1. Require spaces around =
