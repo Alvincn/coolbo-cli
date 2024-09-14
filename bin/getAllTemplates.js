@@ -8,6 +8,7 @@ const getAllTemplates = async (username) => {
     }
   })
 }
+// eslint-disable-next-line no-undef
 module.exports = {
   getAllTemplates,
 }

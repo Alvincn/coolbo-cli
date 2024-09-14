@@ -1,7 +1,7 @@
 # Coolbo-cli
 🌈Integrate common commands to quickly build projects, check, submit, etc., simplify project building, and focus on project development.
 
-**Version**: 0.0.2
+**Version**: 0.0.6
 
 [简体中文](./README.md) | **[English](./README.en.md)**
 

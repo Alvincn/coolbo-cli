@@ -13,6 +13,7 @@ const { execSync } = require('child_process');
 const ora = require('ora') // 引入ora
 const { getAllTemplates } = require('./getAllTemplates.js')
 const { getConfigFromFile, writeConfig } = require('./writeConfig');
+const { eslintDirs } = require('./config/eslintDir');
 
 // 定义当前版本
 program.version(`v${packageJson.version}`)
@@ -77,26 +78,21 @@ program
 program
   .command('lint')
   .option('-f, --fix', '是否修复')
-  .option('-n, --nuxt', 'nuxt项目')
   .description('🔍Lint代码检查')
   .action(async (options) => {
+    const existingDirectories = eslintDirs.filter(pattern => {
+      // 提取第一个路径片段作为目录名，例如 "pages" 从 "pages/**/*.{js,ts,vue,jsx,tsx}"
+      const [dir] = pattern.split('/');
+      return fs.pathExistsSync(dir);
+    });
+    const filePatterns = [...existingDirectories];
+
     try {
       const eslint = new ESLint({
         fix: options.fix,
         overrideConfigFile: path.resolve(__dirname, '../eslint.config.mjs'), // 指定配置文件路径
       });
-      if (options.nuxt) {
-        results = await eslint.lintFiles([
-          'pages/**/*.{js,ts,vue,jsx,tsx}',
-          'components/**/*.{js,ts,vue,jsx,tsx}',
-          'layouts/**/*.{js,ts,vue,jsx,tsx}',
-          'plugins/**/*.{js,ts,vue,jsx,tsx}',
-          'store/**/*.{js,ts,vue,jsx,tsx}',
-          // 如果有自定义目录，也可以添加进来
-        ]);
-      }else {
-        let results = await eslint.lintFiles(['src/**/*.{js,ts,vue,jsx,tsx}']);
-      }
+      let results = await eslint.lintFiles(filePatterns);
       if (options.fix) {
         await ESLint.outputFixes(results);
       }
@@ -120,8 +116,9 @@ program
       // process.exit(hasErrors ? 1 : 0);
     } catch (err) {
       if (err.messageTemplate === 'file-not-found') {
-        console.error('❌ 当前命令适用于 vue/react 项目，如若 nuxt 项目请使用 coolbo lint -n');
+        console.error('❌ 未找到路径文件');
       } else {
+        console.log(err)
         console.error('❌ Error occurred while running ESLint:', err.message);
       }
     }
@@ -193,7 +190,7 @@ program
   .command('config')
   .option('-u --user [gitName]', '配置用户')
   .option('-r --reset', '重置模版')
-  .description('👾 获取 Git 模板用户名')
+  .description('👾获取 Git 模板用户名')
   .action(async (options) => {
     if (options.reset) {
       return await writeConfig('coolbo-cn')
